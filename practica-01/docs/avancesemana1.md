@@ -130,15 +130,15 @@ Se creó el archivo `AUTHORS.md` respetando el formato requerido por el analizad
 
 | Nombre | Matrícula | GitHub |
 |---|---|---|
-| [Nombre integrante 1] | [Matrícula] | @usuario |
-| [Nombre integrante 2] | [Matrícula] | @usuario |
-| [Nombre integrante 3] | [Matrícula] | @usuario |
+| Hernández Loeza José Maximiliano | s23013991 | MaxLoeza18 |
+| Pérez Viveros Emmanuel | s23013933 | EPV612 |
+| Izquierdo Hernández Daniel Isaac | s23013986 | DaniLeft |
 
 Se verificará que cada nombre de usuario de GitHub coincida **exactamente**, incluyendo mayúsculas y minúsculas, con la cuenta utilizada para realizar los commits.
 
 **Evidencia 03 – Archivo `AUTHORS.md`**
 
-![Archivo AUTHORS](./evidencias/semana1_03_authors.png)
+![practica-01/AUTHORS.md](./evidencias/semana1_03_authors.png)
 
 ---
 
