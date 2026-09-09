@@ -479,6 +479,8 @@ La documentación progresiva permitirá que el archivo `Reporte_Evidencias_P1.pd
 
 El avance actual constituye la base para continuar con la implementación completa del sistema de control simulado y posteriormente realizar su transición hacia el sistema físico basado en ESP32.
 
+Durante esta primera semana también se estableció una metodología de trabajo orientada a generar evidencia técnica desde el inicio del proyecto, procurando que cada modificación relevante quede respaldada mediante commits, capturas de pantalla y registros de prueba. Este enfoque permitirá demostrar no solo el resultado final del sistema, sino también la evolución progresiva del desarrollo, la participación de los integrantes del equipo y la validación gradual de los requisitos funcionales establecidos para la práctica.
+
 ---
 
 # ANEXO A. Control de evidencias
@@ -493,6 +495,7 @@ El avance actual constituye la base para continuar con la implementación comple
 | EV-S1-06 | HMI | `semana1_06_hmi.png` | 🟡 |
 | EV-S1-07 | Modo Manual | `semana1_07_modo_manual.png` | 🟡 |
 | EV-S1-08 | Interlock | `semana1_08_interlock.png` | 🟡 |
+
 
 ---
 
