@@ -140,7 +140,7 @@ Se verificará que cada nombre de usuario de GitHub coincida **exactamente**, in
 
 **Evidencia 03 – Archivo `AUTHORS.md`**
 
-![Abrir firmware.cpp en GitHub](https://github.com/usuario/repositorio/blob/main/src/firmware.cpp)
+![Abrir firmware.cpp en GitHub]([https://github.com/usuario/repositorio/blob/main/src/firmware.cpp](https://github.com/Maxloeza18/poo_MADE/blob/main/practica-01/AUTHORS.md)
 ---
 
 # 5. Evidencia del control de versiones
