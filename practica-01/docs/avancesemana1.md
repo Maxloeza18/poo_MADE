@@ -139,9 +139,9 @@ Se creó el archivo `AUTHORS.md` respetando el formato requerido por el analizad
 Se verificará que cada nombre de usuario de GitHub coincida **exactamente**, incluyendo mayúsculas y minúsculas, con la cuenta utilizada para realizar los commits.
 
 **Evidencia 03 – Archivo `AUTHORS.md`**
-##Authors.md
-[Abrir firmware.cpp en GitHub]([https://github.com/usuario/repositorio/blob/main/src/firmware.cpp](https://github.com/Maxloeza18/poo_MADE/blob/main/practica-01/AUTHORS.md)
----
+
+
+[Ver AUTHORS.md en GitHub](https://github.com/Maxloeza18/poo_MADE/blob/main/practica-01/AUTHORS.md)
 
 # 5. Evidencia del control de versiones
 
