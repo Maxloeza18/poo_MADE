@@ -8,6 +8,13 @@ tags:
   - programacion-orientada-a-objetos
 ---
 
+#
+| Nombre                           | Matrícula | Usuario     |
+| -------------------------------- | --------- | ----------- |
+| Jose Maximiliano Hernandez Loeza | S23013991 | Maxloeza18  |
+| Emmanuel Perez Viveros           | S23013933 | Emma612-bit |
+| Daniel Isaac Izquierdo Hernandez | S23013986 | DaniLeft    |
+
 # ESP32 — Circuito y Esquema de Conexión
 
 ## Resumen del Proyecto
@@ -110,12 +117,4 @@ $$R = \frac{V_{fuente} - V_{LED} - V_{CE(sat)}}{I_{LED}}$$
 
 ---
 
-## 6. Comunidad GitHub
 
-| Usuario | Rol | Enlace |
-| --- | --- | --- |
-| | | |
-| | | |
-| | | |
-
----
