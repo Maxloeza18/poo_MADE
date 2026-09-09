@@ -1,3 +1,13 @@
+---
+Fecha de creación: 2026-09-09
+Fecha de terminación: 2026-09-28
+Estado: En progreso
+tags:
+  - ESP32
+  - electronica
+  - programacion-orientada-a-objetos
+---
+
 # REPORTE DE EVIDENCIAS – PRÁCTICA 1
 
 ## Sistemas de Control con Python y aplicación en ESP32
@@ -8,7 +18,7 @@
 **Equipo:** Equipo 7 Made
 **Integrantes:**  
 - Hernández Loeza José Maximiliano – s23013991 – MaxLoeza18
-- Pérez Viveros Emmanuel – s23013933 – EPV612
+- Pérez Viveros Emmanuel – s23013933 – Emma612-bit
 - Izquierdo Hernández Daniel Isaac– s23013986 – DaniLeft
 
 **Periodo de trabajo:** 07/09/2026 al 28/09/2026  
@@ -50,7 +60,7 @@ Durante esta primera semana se da prioridad a la preparación del repositorio, o
 | Interlocks de seguridad | 🟡 En desarrollo | Lógica inicial definida |
 | HMI en consola | 🟡 En desarrollo | Primera interfaz funcional |
 | Hardware ESP32 V2.0.0 | ⚪ Pendiente | Etapa posterior |
-| Diagrama esquemático | ⚪ Pendiente | Etapa posterior |
+| Diagrama esquemático | 🟢 Implementado | Evidencia 09 – Semana 1.2 |
 | Video Simulador Python | ⚪ Pendiente | Se grabará al finalizar V1.0.0 |
 | Video Hardware ESP32 | ⚪ Pendiente | Se grabará al finalizar V2.0.0 |
 
@@ -133,7 +143,7 @@ Se creó el archivo `AUTHORS.md` respetando el formato requerido por el analizad
 | Nombre | Matrícula | GitHub |
 |---|---|---|
 | Hernández Loeza José Maximiliano | s23013991 | MaxLoeza18 |
-| Pérez Viveros Emmanuel | s23013933 | EPV612 |
+| Pérez Viveros Emmanuel | s23013933 | Emma612-bit |
 | Izquierdo Hernández Daniel Isaac | s23013986 | DaniLeft |
 
 Se verificará que cada nombre de usuario de GitHub coincida **exactamente**, incluyendo mayúsculas y minúsculas, con la cuenta utilizada para realizar los commits.
@@ -454,31 +464,128 @@ Los principales avances fueron:
 
 # 13.1 Semana 1.2 – Diseño del esquemático de interconexión
 
-Durante la **segunda sesión de la Semana 1** se avanzó en la planeación de la **Versión 2.0.0 del sistema físico con ESP32**, enfocándose en el diseño del **diagrama esquemático de interconexión de sensores y actuadores**. Esta actividad permitió definir de manera previa cómo se conectarán los dispositivos al microcontrolador, identificando los pines destinados a las entradas analógicas y a las salidas PWM antes de realizar el montaje físico sobre protoboard.
+Durante la **segunda sesión de la Semana 1** se avanzó en la planeación de la **Versión 2.0.0 del sistema físico con ESP32**. En esta sesión se realizó el **esquemático preliminar del sistema** y se definió cómo será la interconexión de los sensores y actuadores antes de realizar el montaje físico en protoboard.
 
-El esquemático desarrollado contempla la integración de los siguientes elementos:
+El trabajo de esta sesión permitió establecer la asignación de pines del ESP32, identificar las señales analógicas y PWM necesarias y definir los elementos de potencia que se utilizarán para evitar conectar directamente el motor y el LED de potencia al microcontrolador.
 
-| Elemento | Función | Pin ESP32 | Tipo de señal |
-|---|---|---:|---|
-| Sensor de temperatura LM35/DHT | Medición de temperatura | GPIO 34 | ADC |
-| Sensor LDR | Medición de iluminación ambiental | GPIO 32 | ADC |
-| Ventilador / Motor DC | Control de enfriamiento | GPIO 18 | PWM |
-| LED de potencia | Compensación de iluminación | GPIO 19 | PWM |
+## 13.1.1 Evidencia del esquemático
 
-La elaboración de este esquema constituye una etapa previa al ensamblaje físico, ya que permite revisar la distribución de señales, reducir errores de conexión y verificar que cada sensor y actuador tenga asignado el pin correspondiente de acuerdo con los requerimientos técnicos de la práctica. También servirá como referencia durante las etapas posteriores de cableado, programación y pruebas del micro-invernadero inteligente.
-
-## Evidencia de la Semana 1.2
-
-**Evidencia 09 – Diagrama esquemático de interconexión**
+**Evidencia 09 – Esquemático preliminar de sensores y actuadores**
 
 ![Diagrama esquemático de sensores y actuadores](./evidencias/semana1_09_esquematico_interconexion.png)
 
 **Descripción:**  
-Diagrama preliminar de la conexión del ESP32 con los sensores de temperatura y luminosidad, así como con los actuadores correspondientes al ventilador y al LED de potencia. En el esquema se identifican los pines de entrada y salida que serán utilizados posteriormente para la implementación física del sistema.
+El diagrama muestra la distribución preliminar de los elementos que integrarán el sistema físico: ESP32, sensor de temperatura LM35, sensor LDR, motor DC utilizado como ventilador y LED. A partir de este esquema se definieron las conexiones eléctricas y los pines que se utilizarán durante el montaje.
 
-## Resultado de la sesión
+## 13.1.2 Resumen del circuito propuesto
 
-Al finalizar la sesión **Semana 1.2**, se cuenta con una propuesta definida para la interconexión eléctrica del sistema, permitiendo avanzar hacia el montaje físico con una referencia técnica previamente establecida. El diseño del esquemático facilita además la posterior validación del funcionamiento de los sensores, la configuración de las señales PWM y la integración del sistema de control implementado en el ESP32.
+El sistema de control con ESP32 integrará sensores de **temperatura** y **luminosidad** con dos actuadores principales: un **ventilador DC** para el control térmico y un **LED de potencia** para compensar la falta de iluminación. Los actuadores serán controlados mediante PWM y se utilizarán transistores o MOSFET como etapas de potencia para proteger las salidas del ESP32.
+
+### Sensores – Entradas
+
+| Componente | Pin ESP32 | Conexión propuesta |
+|---|---|---|
+| LM35 (temperatura) | GPIO 34 (ADC1) | Vout → GPIO 34, VCC → 3.3 V, GND → GND |
+| LDR | GPIO 32 (ADC1) | Divisor de voltaje: LDR entre 3.3 V y GPIO 32; resistencia fija de 10 kΩ entre GPIO 32 y GND |
+
+### Actuadores – Salidas PWM
+
+| Actuador | Pin ESP32 | Etapa de potencia | Función |
+|---|---|---|---|
+| Ventilador / Motor DC | GPIO 18 | MOSFET N | Control de enfriamiento mediante PWM |
+| LED de potencia | GPIO 19 | Transistor NPN o MOSFET | Control de intensidad luminosa mediante PWM |
+
+> **Importante:** El motor y el LED de potencia no se conectarán directamente a los pines del ESP32. Se utilizarán dispositivos de conmutación como buffer o etapa de potencia.
+
+## 13.1.3 Ventilador DC – GPIO 18 mediante MOSFET
+
+La propuesta de conexión para el ventilador es la siguiente:
+
+```text
+GPIO 18 ────[1kΩ]────┬──── Gate
+                      │
+                  IRLZ44N
+                  N-MOSFET
+                      │
+                 Drain ───── Motor (−)
+                              │
+                         Motor (+) ─── Fuente 12V/5V
+                              │
+                       Diodo flyback
+                    1N4007 / 1N5819
+                              │
+                 Source ───── GND
+```
+
+Se eligió una etapa con MOSFET debido a que el ventilador será controlado mediante **PWM a 5 kHz**. A diferencia de un relay mecánico, el MOSFET permite realizar conmutaciones rápidas y controlar la velocidad del motor sin elementos mecánicos.
+
+**Componentes previstos:**
+
+- MOSFET de canal N tipo logic-level, como IRLZ44N o equivalente.
+- Resistencia de Gate de 1 kΩ.
+- Diodo flyback 1N4007 o 1N5819 para protección frente a los picos generados por el motor.
+
+## 13.1.4 LED de potencia – GPIO 19 mediante transistor
+
+La propuesta inicial de conexión para el LED es:
+
+```text
+GPIO 19 ────[220Ω]────┬──── Base
+                       │
+                    2N2222
+                   NPN BJT
+                       │
+               Collector ───[Resistencia LED]─── LED (−)
+                                                  │
+                                             LED (+)
+                                                  │
+                                           Fuente 5V/12V
+                       │
+                  Emitter ─── GND
+```
+
+En caso de utilizar un LED de alta potencia, superior a 1 W, se contempla sustituir el transistor BJT por una etapa MOSFET similar a la utilizada para el motor.
+
+La resistencia limitadora del LED podrá calcularse mediante:
+
+$$
+R = rac{V_{fuente} - V_{LED} - V_{CE(sat)}}{I_{LED}}
+$$
+
+## 13.1.5 Distribución funcional de conexiones
+
+```text
+                    ┌────────────────┐
+ LM35 Vout ────────►│ GPIO34         │
+ LDR ──────────────►│ GPIO32   GPIO18├──── PWM ─── MOSFET ─── Ventilador
+                    │                │
+                    │     ESP32      │
+                    │                │
+                    │         GPIO19 ├──── PWM ─── Transistor/MOSFET ─── LED
+                    └────────────────┘
+```
+
+Esta distribución permite separar claramente las **entradas analógicas** de las **salidas PWM**, facilitando posteriormente la programación del sistema y el diagnóstico de fallas durante el montaje.
+
+## 13.1.6 Consideraciones técnicas registradas
+
+- GPIO 34 se utilizará como entrada analógica para el sensor de temperatura.
+- GPIO 32 se utilizará como entrada analógica para el sensor LDR.
+- GPIO 18 se utilizará para generar PWM hacia la etapa de potencia del ventilador.
+- GPIO 19 se utilizará para generar PWM hacia la etapa de potencia del LED.
+- El sensor LDR trabajará mediante un divisor de voltaje.
+- Se utilizará una etapa de potencia para el motor y otra para el LED.
+- El motor contará con un diodo flyback de protección.
+- Los sensores se mantendrán en entradas ADC1 para la adquisición de datos.
+- El esquemático servirá como referencia para el montaje físico y la posterior programación del ESP32.
+
+## 13.1.7 Resultado de la sesión
+
+Al finalizar la **Semana 1.2** se cuenta con una propuesta técnica definida para la interconexión del micro-invernadero inteligente. El esquemático y la documentación de conexiones permiten avanzar a la siguiente etapa con una referencia clara sobre la asignación de pines, las entradas de sensores, las salidas PWM y las etapas de potencia necesarias.
+
+Este avance reduce la posibilidad de errores durante el cableado y permitirá que, en las sesiones posteriores, el equipo concentre el trabajo en el **montaje físico, validación de sensores, configuración del PWM y programación del control automático**.
+
+---
 
 
 # 14. Actividades para la siguiente etapa
@@ -500,6 +607,9 @@ En la siguiente etapa se continuará principalmente con la **Versión 1.0.0 del 
 - Mejorar la HMI.
 - Registrar nuevos commits distribuidos temporalmente.
 - Incorporar nuevas capturas al reporte.
+- Iniciar el montaje físico del ESP32 con LM35, LDR, ventilador y LED.
+- Validar las etapas de potencia propuestas para los actuadores.
+- Verificar la lectura de GPIO 34 y GPIO 32 antes de integrar el control automático.
 
 ---
 
@@ -511,7 +621,7 @@ Además del inicio de la programación del simulador, se estableció desde esta 
 
 La documentación progresiva permitirá que el archivo `Reporte_Evidencias_P1.pdf` no sea elaborado únicamente al finalizar el proyecto, sino que represente de manera cronológica la evolución del sistema, las pruebas realizadas y las contribuciones efectuadas por los integrantes del equipo.
 
-El avance actual constituye la base para continuar con la implementación completa del sistema de control simulado y posteriormente realizar su transición hacia el sistema físico basado en ESP32.
+El avance actual constituye la base para continuar con la implementación completa del sistema de control simulado y posteriormente realizar su transición hacia el sistema físico basado en ESP32. Como parte de la **Semana 1.2**, también quedó definida la propuesta de interconexión eléctrica de los sensores y actuadores, por lo que el proyecto ya cuenta con una referencia técnica para iniciar el montaje físico.
 
 Durante esta primera semana también se estableció una metodología de trabajo orientada a generar evidencia técnica desde el inicio del proyecto, procurando que cada modificación relevante quede respaldada mediante commits, capturas de pantalla y registros de prueba. Este enfoque permitirá demostrar no solo el resultado final del sistema, sino también la evolución progresiva del desarrollo, la participación de los integrantes del equipo y la validación gradual de los requisitos funcionales establecidos para la práctica.
 
