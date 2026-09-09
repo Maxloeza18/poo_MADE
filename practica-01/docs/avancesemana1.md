@@ -11,7 +11,9 @@
 - Pérez Viveros Emmanuel – s23013933 – EPV612
 - Izquierdo Hernández Daniel Isaac– s23013986 – DaniLeft
 
-**Fecha:** [07/08/2026]  
+**Periodo de trabajo:** 07/09/2026 al 28/09/2026  
+**Fecha de inicio:** 07/09/2026  
+**Fecha de término programada:** 28/09/2026  
 **Repositorio GitHub:** [https://github.com/Maxloeza18/poo_MADE.git]
 
 ---
@@ -336,7 +338,7 @@ Para asegurar el cumplimiento del punto 4 de la práctica se utilizará la sigui
 | 14 | Ventilador PWM | ⬜ | ⬜ |
 | 15 | LED PWM | ⬜ | ⬜ |
 | 16 | Monitor Serie | ⬜ | ⬜ |
-| 17 | Diagrama esquemático | ⬜ | ⬜ |
+| 17 | Diagrama esquemático | ✅ Semana 1.2 | ✅ |
 | 18 | Video demostración Python | ⬜ | ⬜ |
 | 19 | Video demostración ESP32 | ⬜ | ⬜ |
 
@@ -361,6 +363,7 @@ semana1_05_simulador_python.png
 semana1_06_hmi.png
 semana1_07_modo_manual.png
 semana1_08_interlock.png
+semana1_09_esquematico_interconexion.png
 ```
 
 Para etapas posteriores:
@@ -444,8 +447,40 @@ Los principales avances fueron:
 8. Inicio del Modo Manual.
 9. Definición de la lógica de los interlocks de seguridad.
 10. Creación de una matriz para controlar las evidencias requeridas por la rúbrica.
+11. Elaboración del diagrama esquemático para la interconexión de sensores y actuadores del ESP32.
 
 ---
+
+---
+
+# 13.1 Semana 1.2 – Diseño del esquemático de interconexión
+
+Durante la **segunda sesión de la Semana 1** se avanzó en la planeación de la **Versión 2.0.0 del sistema físico con ESP32**, enfocándose en el diseño del **diagrama esquemático de interconexión de sensores y actuadores**. Esta actividad permitió definir de manera previa cómo se conectarán los dispositivos al microcontrolador, identificando los pines destinados a las entradas analógicas y a las salidas PWM antes de realizar el montaje físico sobre protoboard.
+
+El esquemático desarrollado contempla la integración de los siguientes elementos:
+
+| Elemento | Función | Pin ESP32 | Tipo de señal |
+|---|---|---:|---|
+| Sensor de temperatura LM35/DHT | Medición de temperatura | GPIO 34 | ADC |
+| Sensor LDR | Medición de iluminación ambiental | GPIO 32 | ADC |
+| Ventilador / Motor DC | Control de enfriamiento | GPIO 18 | PWM |
+| LED de potencia | Compensación de iluminación | GPIO 19 | PWM |
+
+La elaboración de este esquema constituye una etapa previa al ensamblaje físico, ya que permite revisar la distribución de señales, reducir errores de conexión y verificar que cada sensor y actuador tenga asignado el pin correspondiente de acuerdo con los requerimientos técnicos de la práctica. También servirá como referencia durante las etapas posteriores de cableado, programación y pruebas del micro-invernadero inteligente.
+
+## Evidencia de la Semana 1.2
+
+**Evidencia 09 – Diagrama esquemático de interconexión**
+
+![Diagrama esquemático de sensores y actuadores](./evidencias/semana1_09_esquematico_interconexion.png)
+
+**Descripción:**  
+Diagrama preliminar de la conexión del ESP32 con los sensores de temperatura y luminosidad, así como con los actuadores correspondientes al ventilador y al LED de potencia. En el esquema se identifican los pines de entrada y salida que serán utilizados posteriormente para la implementación física del sistema.
+
+## Resultado de la sesión
+
+Al finalizar la sesión **Semana 1.2**, se cuenta con una propuesta definida para la interconexión eléctrica del sistema, permitiendo avanzar hacia el montaje físico con una referencia técnica previamente establecida. El diseño del esquemático facilita además la posterior validación del funcionamiento de los sensores, la configuración de las señales PWM y la integración del sistema de control implementado en el ESP32.
+
 
 # 14. Actividades para la siguiente etapa
 
@@ -495,6 +530,7 @@ Durante esta primera semana también se estableció una metodología de trabajo 
 | EV-S1-06 | HMI | `semana1_06_hmi.png` | 🟡 |
 | EV-S1-07 | Modo Manual | `semana1_07_modo_manual.png` | 🟡 |
 | EV-S1-08 | Interlock | `semana1_08_interlock.png` | 🟡 |
+| EV-S1-09 | Esquemático de interconexión ESP32 | `semana1_09_esquematico_interconexion.png` | ✅ |
 
 
 ---
