@@ -472,7 +472,7 @@ El trabajo de esta sesión permitió establecer la asignación de pines del ESP3
 
 **Evidencia 09 – Esquemático preliminar de sensores y actuadores**
 
-![Diagrama esquemático de sensores y actuadores](./evidencias/semana1_09_esquematico_interconexion.png)
+![Diagrama esquemático de sensores y actuadores](./evidencias/semana1_09_esquematico_interconexion.png](https://github.com/Maxloeza18/poo_MADE/blob/main/practica-01/docs/avances%20Sketch_esquem%C3%A1tico_semana%201.pdf))
 
 **Descripción:**  
 El diagrama muestra la distribución preliminar de los elementos que integrarán el sistema físico: ESP32, sensor de temperatura LM35, sensor LDR, motor DC utilizado como ventilador y LED. A partir de este esquema se definieron las conexiones eléctricas y los pines que se utilizarán durante el montaje.
