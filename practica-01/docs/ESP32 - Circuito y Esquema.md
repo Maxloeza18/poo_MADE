@@ -41,17 +41,22 @@ Sistema de control con ESP32 que integra sensores (temperatura LM35 y LDR) y act
 ## 2. Ventilador (Motor DC) — Pin 18 → MOSFET
 
 ```
-GPIO 18 ────[1kΩ]────┬──── Gate
-                       │
-                   IRLZ44N (N-MOSFET)
-                       │
-                  Drain ──── Motor (−)
-                               │
-                          Motor (+) ──── Fuente 12V/5V
-                               │
-                          ┤├  Diodo 1N4007 (en paralelo con motor, cátodo a +)
-                               │
-                       Source ──── GND
+┌───────────────────────┐                    ┌───────────────────────┐
+│         ESP32         │                    │     Módulo L298N      │
+│                       │                    │                       │
+│               GPIO 32 ├───────────────────>│ IN1                   │
+│                       │                    │                       │
+│                   GND ├──┐                 │ IN2 (Conectado a GND) │
+└───────────────────────┘  │                 │                       │              ┌───────────────────────┐
+                           ├──┬─────────────>│ GND (Tierra común)    │              │       Motor DC        │
+                           │  │              │                       │              │                       │
+┌───────────────────────┐  │  │              │                  OUT1 ├─────────────>│ Terminal (+)          │
+│    Fuente Externa     │  │  │              │                       │              │                       │
+│      (5V - 12V)       │  │  │              │                  OUT2 ├─────────────>│ Terminal (-)          │
+│                   (+) ├──┼──┼─────────────>│ +12V / VCC            │              └───────────────────────┘
+│                   (-) └──┘  │              │                       │
+└─────────────────────────────┘              │ ENA  [Jumper puesto]  │
+                                             └───────────────────────┘
 ```
 
 **Por qué MOSFET y no relay:**
@@ -92,13 +97,13 @@ $$R = \frac{V_{fuente} - V_{LED} - V_{CE(sat)}}{I_{LED}}$$
 
 ```
                     ┌──────────────┐
-         3.3V ─────┤ 34    GPIO18 ├────[1kΩ]────┤Gate
-         GND  ─────┤ GND   GPIO19 ├────[220Ω]───┤Base
-                   │              │              │
-   ┌──── LM35      │    ESP32     │         ┌────┘
-   │  Vout→34      │              │      IRLZ44N    2N2222
-   │  VCC→3.3V     │              │      Drain──Motor──12V
-   │  GND→GND      │              │      Source──GND
+         3.3V ─────┤ 34    GPIO18 ├────[L298n]
+         GND  ─────┤ GND   GPIO19 ├
+                   │              │              
+   ┌──── LM35      │    ESP32     │         
+   │  Vout→34      │              │      
+   │  VCC→3.3V     │              │      
+   │  GND→GND      │              │     
    └───────────────┤              ├────[10kΩ]──LDR──3.3V
                    └──────────────┘     │
                                        GPIO32
