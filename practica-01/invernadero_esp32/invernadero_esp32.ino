@@ -4,12 +4,18 @@
 // Asignación de Pines
 const int PIN_TEMP_SENSOR = 34; // ADC Sensor Térmico
 const int PIN_LDR_SENSOR  = 32; // ADC Sensor LDR
-const int PIN_FAN_PWM     = 18; // PWM Ventilador
-const int PIN_LED_PWM     = 19; // PWM LED de Potencia
+
+// Control de Motor/Ventilador (Módulo Puente H - L298N / L293D)
+const int PIN_FAN_PWM   = 18;   // ENA en L298N (Habilitador PWM)
+const int PIN_FAN_DIR1  = 22;   // IN1 en L298N (Dirección A)
+const int PIN_FAN_DIR2  = 23;   // IN2 en L298N (Dirección B)
+
+// Control de LED
+const int PIN_LED_PWM   = 19;   // PWM LED de Potencia
 
 // Configuración LEDC (PWM 5kHz)
-const int PWM_FREQ       = 5000;
-const int PWM_RESOLUTION = 8; // 0-255
+const int PWM_FREQ        = 5000;
+const int PWM_RESOLUTION  = 8; // 0-255
 const int FAN_PWM_CHANNEL = 0;
 const int LED_PWM_CHANNEL = 1;
 
@@ -17,12 +23,22 @@ void setup() {
   Serial.begin(115200);
   analogReadResolution(12);
 
+  // Configuración de pines de dirección del motor
+  pinMode(PIN_FAN_DIR1, OUTPUT);
+  pinMode(PIN_FAN_DIR2, OUTPUT);
+
+  // Sentido de giro por defecto (IN1 HIGH, IN2 LOW)
+  digitalWrite(PIN_FAN_DIR1, HIGH);
+  digitalWrite(PIN_FAN_DIR2, LOW);
+
+  // Configuración PWM ESP32
   ledcSetup(FAN_PWM_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
   ledcAttachPin(PIN_FAN_PWM, FAN_PWM_CHANNEL);
 
   ledcSetup(LED_PWM_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
   ledcAttachPin(PIN_LED_PWM, LED_PWM_CHANNEL);
 
+  // Estado inicial (apagados)
   ledcWrite(FAN_PWM_CHANNEL, 0);
   ledcWrite(LED_PWM_CHANNEL, 0);
 }
@@ -46,7 +62,7 @@ void loop() {
     Serial.println(); // Salto de línea como delimitador
   }
 
-  // 3. Recepción de Comandos/Control desde Python
+  // 3. Recepción de Comandos desde Python
   if (Serial.available() > 0) {
     String input = Serial.readStringUntil('\n');
     StaticJsonDocument<200> docIn;
@@ -55,8 +71,20 @@ void loop() {
     if (!error) {
       if (docIn.containsKey("fan_duty")) {
         int fanDuty = docIn["fan_duty"];
+        
+        // Si el valor recibido es positivo/negativo se puede controlar la dirección
+        if (fanDuty < 0) {
+          digitalWrite(PIN_FAN_DIR1, LOW);
+          digitalWrite(PIN_FAN_DIR2, HIGH);
+          fanDuty = abs(fanDuty);
+        } else {
+          digitalWrite(PIN_FAN_DIR1, HIGH);
+          digitalWrite(PIN_FAN_DIR2, LOW);
+        }
+
         ledcWrite(FAN_PWM_CHANNEL, constrain(fanDuty, 0, 255));
       }
+
       if (docIn.containsKey("led_duty")) {
         int ledDuty = docIn["led_duty"];
         ledcWrite(LED_PWM_CHANNEL, constrain(ledDuty, 0, 255));
