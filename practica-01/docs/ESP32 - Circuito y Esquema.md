@@ -38,7 +38,7 @@ Sistema de control con ESP32 que integra sensores (temperatura LM35 y LDR) y act
 
 ---
 
-## 2. Ventilador (Motor DC) — Pin 18 → MOSFET
+## 2. Ventilador (Motor DC) 
 
 ```
 ┌───────────────────────┐                    ┌───────────────────────┐
