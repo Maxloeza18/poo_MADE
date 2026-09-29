@@ -18,9 +18,4 @@
 * **Modelado POO:** Uso de clases y objetos para simular el comportamiento de las variables ambientales del invernadero.
 * **Control de Sensores:** Monitoreo y lectura de temperatura y humedad en tiempo real.
 * **Automatización:** Activación de respuestas del sistema ante cambios climáticos simulados.
-
----
-
-## 🚀 Demostración en Vivo
-* ¡A continuación presentaremos la ejecución del código guardado en nuestro repositorio!
-* ¡Gracias por su atención!
+https://uvmx.sharepoint.com/:v:/s/AdministracinyEvaluacindeProyectos/IQB4FSnmFVrcS61qjsgiL7r7AaJDc-LF1u3_xFoLt70suAw?e=gjzq9G
