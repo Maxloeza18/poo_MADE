@@ -1,0 +1,22 @@
+name: Publicar mañana
+on:
+  schedule:
+    # Minuto 45, Hora 17 (UTC), Día 14, Mes 10
+    - cron: '45 17 14 10 *'
+jobs:
+  hacer-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configurar Git y hacer Merge
+        run: |
+          git config user.name "GitHub Actions Automático"
+          git config user.email "actions@github.com"
+          git checkout main
+          git merge origin/cambios-programados -m "Merge automático programado"
+          git push origin main
