@@ -9,7 +9,7 @@ Python
 programacion-orientada-a-objetos
 herencia
 encapsulamiento
-polimorfismo
+polimorfismo 
 iot
 ---
 Práctica 2 — Avance de desarrollo, Semana 1 y 2
