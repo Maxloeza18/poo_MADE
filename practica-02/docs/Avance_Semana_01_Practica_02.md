@@ -1,22 +1,22 @@
 ---
 practica: 2
 titulo: "Sistema Modular de Nodos IoT"
-tipo_documento: "Avance de desarrollo - Semana 1 y 2"
+tipo_documento: "Avance de desarrollo — Semana 1"
 fecha_entrega: "2026-11-07"
-estado: "Diseno inicial documentado; implementacion por verificar"
+estado: "Diseño inicial documentado; implementación por verificar"
 tags:
-python
+Python
 programacion-orientada-a-objetos
 herencia
 encapsulamiento
 polimorfismo
 iot
 ---
-Práctica 2 — Avance de desarrollo, Semana 1 y 2
+Práctica 2 — Avance de desarrollo, Semana 1
 Sistema Modular de Nodos IoT: Herencia y Polimorfismo en Python
 Asignatura: Programación Orientada a Objetos  
 Fecha de entrega indicada: 07 de noviembre de 2026  
-Etapa del documento: Semana 1 y 2 — diseño preliminar  
+Etapa del documento: Semana 1 — diseño preliminar  
 Modalidad: Simulación 100 % en Python, sin montaje ESP32 en esta práctica  
 Reporte final requerido: `practica-02/docs/Reporte_Evidencias_P2.pdf`
 Integrantes del equipo
