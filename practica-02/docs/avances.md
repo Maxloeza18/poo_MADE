@@ -1,49 +1,59 @@
 ---
 Fecha: 2026-10-14
-Estado: En progreso
+Estado: En desarrollo
 tags:
   - programacion-orientada-a-objetos
-  - avances
+  - poe
   - herencia
   - polimorfismo
   - python
 ---
 
-# Avances — Práctica 2: Sistema Modular de Nodos IoT (Herencia y Polimorfismo en Python)
+# Bitácora de Avances — Práctica 2: Arquitectura Modular de Nodos IoT (Herencia y Polimorfismo en Python)
 
-## Objetivo
+## 🎯 Objetivo de la Práctica
 
-Refactorizar las clases sueltas de la Práctica 1 agrupándolas bajo una **superclase padre** (`NodoIoT`) para reutilizar código, y controlar toda la red con un **bucle polimórfico** sin usar `if/else` para identificar el tipo de dispositivo. Práctica 100 % en Python (simulación).
+Refactorizar las clases independientes de la Práctica 1 integrándolas bajo una **superclase base** (`NodoIoT`). Esto permite optimizar la reutilización de código y gestionar la red completa mediante un **bucle polimórfico**, eliminando el uso de estructuras condicionales (`if/else`) para identificar la naturaleza de cada dispositivo. Simulación desarrollada íntegramente en Python.
 
-## Conceptos aplicados
+---
 
-- [x] **Abstracción** — modelar sensores y actuadores como nodos de una red IoT.
-- [x] **Herencia** — `NodoSensor` y `NodoActuador` heredan de `NodoIoT` con `super()`.
-- [x] **Encapsulamiento** — atributos privados (`__limite_alerta`, `__estado_activo`, `__potencia_pwm`) con *setters* que validan.
-- [x] **Polimorfismo** — bucle `for` sobre `red_iot` invocando `enviar_telemetria()` sin condicionales por tipo.
+## 🧩 Conceptos Clave Aplicados
 
-## Lo hecho
+- [x] **Abstracción** — Representación conceptual de sensores y actuadores como elementos unificados dentro de una red IoT.
+- [x] **Herencia** — Implementación de `NodoSensor` y `NodoActuador` derivando de `NodoIoT` mediante el uso de `super()`.
+- [x] **Encapsulamiento** — Protección de datos internos (`__limite_alerta`, `__estado_activo`, `__potencia_pwm`) gestionados a través de *setters* con validación de entradas.
+- [x] **Polimorfismo** — Iteración limpia con un ciclo `for` sobre la estructura `red_iot`, invocando `enviar_telemetria()` de forma universal sin evaluar tipos de objetos.
 
-- `src/nodo_iot.py` — superclase `NodoIoT` con `id_dispositivo`, `ip`, `ubicacion`, `conectado`, y métodos `conectar()` / `enviar_telemetria()`.
-- `src/nodo_sensor.py` — subclase `NodoSensor` con `super()`, atributo privado `__limite_alerta` y su *setter* con validación; sobrescribe `enviar_telemetria()`.
-- `src/nodo_actuador.py` — subclase `NodoActuador` con atributos privados `__estado_activo` y `__potencia_pwm`; métodos `encender()` / `apagar()`; sobrescribe `enviar_telemetria()`.
-- `src/main.py` — script principal con la lista mixta `red_iot` y el bucle polimórfico.
+---
 
-## Evidencias
+## 🛠️ Avances Realizados (Código Implementado)
 
-- [ ] Capturas de la consola (salida del bucle polimórfico).
-- [ ] Enlace al video demostrativo público (máx. 3 minutos).
-- [ ] Archivos guardados en `evidencias/`.
+- `src/nodo_iot.py` — Creación de la clase madre `NodoIoT` con atributos comunes (`id_dispositivo`, `ip`, `ubicacion`, `conectado`) y métodos base como `conectar()` y `enviar_telemetria()`.
+- `src/nodo_sensor.py` — Desarrollo de la subclase `NodoSensor`, integrando `super()`, el atributo privado `__limite_alerta` con validación de rango, y la sobrescritura (*override*) del método `enviar_telemetria()`.
+- `src/nodo_actuador.py` — Estructuración de la subclase `NodoActuador`, incorporando los atributos privados `__estado_activo` y `__potencia_pwm`, funciones de control (`encender()` / `apagar()`), y su respectiva adaptación de `enviar_telemetria()`.
+- `src/main.py` — Configuración del script principal que instancia la lista heterogénea `red_iot` y ejecuta el comportamiento polimórfico en tiempo de ejecución.
 
-## Pendientes
+---
 
-- [ ] Diseñar e incluir el **diagrama UML** en el reporte PDF.
-- [ ] Tomar capturas de la consola y grabar el video.
-- [ ] Generar `Reporte_Evidencias_P2` en PDF dentro de `docs/`.
+## 📋 Evidencias Requeridas
 
-## Checklist de entrega
+- [ ] Capturas de pantalla de la terminal (muestra de la ejecución del bucle polimórfico).
+- [ ] Enlace al video demostrativo subido a la plataforma (duración máxima de 3 minutos).
+- [ ] Resguardo de archivos multimedia en la carpeta `evidencias/`.
 
-- [x] Código en `src/` con herencia, encapsulamiento y polimorfismo.
-- [ ] Reporte en `docs/` (`Reporte_Evidencias_P2.pdf`).
-- [ ] Evidencias en `evidencias/`.
-- [x] `README.md` de la práctica actualizado.
+---
+
+## 📌 Tareas Pendientes
+
+- [ ] Elaborar e integrar el **diagrama UML** correspondiente dentro del reporte técnico en PDF.
+- [ ] Tomar las capturas de consola y realizar la grabación del video explicativo.
+- [ ] Compilar y exportar el documento final `Reporte_Evidencias_P2.pdf` dentro del directorio `docs/`.
+
+---
+
+## ✅ Checklist de Entrega
+
+- [x] Estructura de código organizada en `src/` aplicando herencia, encapsulamiento y polimorfismo.
+- [ ] Reporte formal en `docs/` (`Reporte_Evidencias_P2.pdf`).
+- [ ] Carpeta de `evidencias/` completa.
+- [x] Archivo `README.md` actualizado con la información de la práctica.
