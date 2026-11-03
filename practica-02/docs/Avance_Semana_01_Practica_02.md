@@ -1,5 +1,5 @@
 ---
-practica: 2
+practica 2
 titulo "Sistema de Control Distribuido de Microclimas Agrícolas"
 subtitulo "Arquitectura modular de nodos IoT mediante herencia y polimorfismo"
 asignatura "Programación Orientada a Objetos"
