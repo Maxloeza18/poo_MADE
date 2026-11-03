@@ -1,48 +1,62 @@
 ---
 practica: 2
-titulo: "Sistema Modular de Nodos IoT"
-tipo_documento: "Avance de desarrollo — Semana 1"
+titulo: "Sistema de Control Distribuido de Microclimas Agrícolas"
+subtitulo: "Arquitectura modular de nodos IoT mediante herencia y polimorfismo"
+asignatura: "Programación Orientada a Objetos"
+tipo_documento: "Bitácora de avances — Semanas 1, 2 y 3"
+fecha_inicio: "2026-10-14"
+fecha_actualizacion: "2026-11-03"
 fecha_entrega: "2026-11-07"
-estado: "Diseño inicial documentado; implementación por verificar"
+estado: "En desarrollo; validación de evidencias pendiente"
 tags:
-Python
+python
 programacion-orientada-a-objetos
 herencia
 encapsulamiento
 polimorfismo
 iot
+histeresis
 ---
-Práctica 2 — Avance de desarrollo, Semana 1
-Sistema Modular de Nodos IoT: Herencia y Polimorfismo en Python
+Práctica 2 — Bitácora de avances: semanas 1, 2 y 3
+Sistema de Control Distribuido de Microclimas Agrícolas
 Asignatura: Programación Orientada a Objetos  
-Fecha de entrega indicada: 07 de noviembre de 2026  
-Etapa del documento: Semana 1 — diseño preliminar  
-Modalidad: Simulación 100 % en Python, sin montaje ESP32 en esta práctica  
-Reporte final requerido: `practica-02/docs/Reporte_Evidencias_P2.pdf`
+Lenguaje: Python  
+Modalidad: Simulación de nodos IoT en software, sin montaje físico con ESP32  
+Inicio documentado: 14 de octubre de 2026  
+Actualización del reporte: 3 de noviembre de 2026  
+Fecha de entrega indicada: 7 de noviembre de 2026  
+Estado: En desarrollo
 Integrantes del equipo
-Nombre	Matrícula	Usuario de GitHub
+Nombre	Matrícula	GitHub
 Jose Maximiliano Hernandez Loeza	S23013991	`Maxloeza18`
 Emmanuel Perez Viveros	S23013933	`Emma612-bit`
 Daniel Isaac Izquierdo Hernandez	S23013986	`DaniLeft`
 ---
 1. Introducción
-La segunda práctica plantea la evolución de los programas de sensores y actuadores desarrollados en la Práctica 1 hacia una arquitectura de software modular. En lugar de representar cada dispositivo mediante clases aisladas, se propone una superclase `NodoIoT` que concentra las características y operaciones compartidas. A partir de ella se derivarán `NodoSensor` y `NodoActuador`, cada una con atributos y comportamientos específicos.
-El avance de esta primera semana se enfoca en definir la arquitectura de clases, documentar el uso previsto de herencia, encapsulamiento y polimorfismo, y establecer la organización del repositorio. El propósito es contar con un diseño revisable antes de iniciar o concluir la implementación en Python.
-> **Alcance de la evidencia:** este documento contiene una propuesta de diseño elaborada a partir de las indicaciones de la práctica. No se han aportado todavía código ejecutable de la Práctica 2, capturas de consola ni enlaces de video; por lo tanto, **no se reportan como pruebas realizadas**.
-2. Objetivo del avance
-Diseñar la estructura de un sistema modular de nodos IoT simulados, identificando las responsabilidades de una clase padre y dos subclases, así como el mecanismo con el que una lista heterogénea de objetos podrá generar telemetría mediante llamadas polimórficas.
-Resultados esperados para la primera etapa: contar con una propuesta de diagrama UML, un esquema de organización de archivos y criterios preliminares para validar atributos privados y sobrescribir métodos, listos para convertirse en código y evidencias de ejecución.
-3. Semana 1 — Análisis y diseño
-3.1 Sesión 1.1 — Definición de la arquitectura
-Se establece como diseño base una estructura de tres clases:
-Clase	Responsabilidad	Elementos clave
-`NodoIoT`	Compartir la identidad y conexión de los dispositivos	`id_dispositivo`, `ip`, `ubicacion`, `conectado`, `conectar()`, `enviar_telemetria()`
-`NodoSensor`	Representar nodos de medición	Herencia con `super()`, `__limite_alerta`, setter validado, lectura actual y sobrescritura de telemetría
-`NodoActuador`	Representar nodos de actuación	`__estado_activo`, `__potencia_pwm`, `encender()`, `apagar()` y sobrescritura de telemetría
-La lógica común se concentrará en `NodoIoT`, mientras que las clases hijas conservarán la responsabilidad de interpretar y mostrar la información que les corresponde. Así se busca evitar duplicación y facilitar la incorporación futura de más tipos de nodos.
-Como criterio inicial, el atributo `conectado` indicará si un nodo se encuentra disponible en la simulación; el método `conectar()` se encargará de actualizar ese estado. Su comportamiento definitivo se verificará al implementar la clase padre.
-3.2 Sesión 1.2 — Propuesta de diagrama UML
-El siguiente diagrama es una propuesta inicial de clases. La notación `+` indica elementos públicos y `-` elementos privados. Las flechas apuntan a la superclase `NodoIoT`. Los atributos y métodos adicionales respecto de la guía, como `lectura_actual` o `ajustar_potencia_pwm()`, son decisiones propuestas para facilitar la implementación y deberán confirmarse al programar.
+La Práctica 2 consiste en reorganizar el sistema de sensores y actuadores de la práctica anterior para convertirlo en una red IoT simulada más fácil de ampliar y mantener. En esta nueva versión se utiliza programación orientada a objetos (POO): todos los dispositivos comparten una clase base y cada tipo de nodo agrega sus propias funciones.
+El caso de aplicación elegido es el monitoreo y control de un microclima agrícola, como el de un invernadero. El sistema representa sensores de humedad del suelo, temperatura, humedad relativa e iluminación, así como actuadores de riego, ventilación y alumbrado. Estos componentes se comunican de manera lógica dentro de una simulación desarrollada en Python.
+Este documento reúne los avances de tres semanas: primero, el análisis y diseño de las clases; después, la implementación reportada de la estructura en Python; y finalmente, la integración propuesta de la red con una vista de monitoreo y reglas de control por histéresis.
+> **Nota sobre evidencias:** el equipo proporcionó una descripción de archivos de código implementados y una imagen del panel de monitoreo. No se adjuntaron los archivos `.py`, salidas de ejecución ni registros de pruebas. Por ello, las implementaciones se describen como *reportadas* y la imagen se utiliza como *referencia visual*, sin presentarla como prueba de funcionamiento verificado.
+2. Objetivo general
+Desarrollar una arquitectura modular de nodos IoT en Python, aplicando abstracción, herencia, encapsulamiento y polimorfismo, para simular la supervisión de sensores y el control de actuadores de un invernadero mediante telemetría y reglas de operación.
+2.1 Objetivos específicos
+Identificar los atributos y métodos comunes de los dispositivos IoT.
+Definir una superclase `NodoIoT` y dos subclases: `NodoSensor` y `NodoActuador`.
+Proteger información interna mediante atributos privados y métodos de validación.
+Usar `enviar_telemetria()` de manera polimórfica en una lista mixta de dispositivos.
+Representar la información de sensores y actuadores en una interfaz de supervisión.
+Plantear reglas de encendido y apagado con histéresis para reducir cambios continuos de estado.
+---
+3. Semana 1 — Análisis y diseño de la arquitectura
+Enfoque: comprender el problema, organizar las responsabilidades y proponer la estructura inicial del programa.
+3.1 Actividades de la semana
+Se analizaron los dispositivos necesarios para representar el funcionamiento de un invernadero. Los sensores obtienen valores simulados del ambiente y los actuadores modifican estados de operación. A partir de esto, se propuso una clase padre que concentre los datos compartidos por todos los nodos.
+Clase	Función principal	Atributos y métodos previstos
+`NodoIoT`	Identificar y conectar cualquier dispositivo de la red	`id_dispositivo`, `ip`, `ubicacion`, `conectado`, `conectar()`, `enviar_telemetria()`
+`NodoSensor`	Representar las mediciones del ambiente	`lectura_actual`, `__limite_alerta`, validación del límite y telemetría especializada
+`NodoActuador`	Representar acciones de control	`__estado_activo`, `__potencia_pwm`, `encender()`, `apagar()` y telemetría especializada
+Se determinó que las clases hijas utilizarían `super()` para inicializar los datos heredados y que cada una sobrescribiría `enviar_telemetria()` para generar mensajes acordes con su función.
+3.2 Diagrama de clases propuesto
 ```mermaid
 classDiagram
     class NodoIoT {
@@ -57,7 +71,7 @@ classDiagram
     class NodoSensor {
         +float lectura_actual
         -float __limite_alerta
-        +establecer_limite_alerta(valor: float) None
+        +establecer_limite_alerta(valor) None
         +enviar_telemetria() str
     }
 
@@ -66,70 +80,151 @@ classDiagram
         -int __potencia_pwm
         +encender() None
         +apagar() None
-        +ajustar_potencia_pwm(valor: int) None
+        +ajustar_potencia_pwm(valor) None
         +enviar_telemetria() str
     }
 
     NodoIoT <|-- NodoSensor
     NodoIoT <|-- NodoActuador
 ```
-Observación para la entrega: el diagrama deberá exportarse posteriormente como imagen e incorporarse al PDF final, de modo que sea legible aun en visores que no interpreten Mermaid.
-3.3 Criterios de encapsulamiento
-Para `NodoSensor`, el límite de alerta se mantendrá en el atributo privado `__limite_alerta`. Su modificación se realizará por medio de un setter que verifique que el dato sea numérico, finito y compatible con el rango de medición definido para el sensor. Los límites concretos dependerán del tipo de sensor simulado y deberán establecerse en la implementación.
-Para `NodoActuador`, el estado de encendido y la potencia estarán protegidos mediante `__estado_activo` y `__potencia_pwm`. Los métodos públicos serán la vía para modificar estos valores. Como propuesta, si se adopta PWM de 8 bits, se validará un intervalo entero de `0` a `255`; esta resolución no está fijada explícitamente en las indicaciones de la Práctica 2.
-Durante las pruebas se contemplará verificar que los valores fuera de rango no modifiquen el estado del objeto. El mecanismo para informar errores (por ejemplo, mediante `ValueError`) se definirá al implementar los métodos.
-3.4 Diseño del bucle polimórfico
-El programa principal utilizará una colección con distintos tipos de nodos. El método `enviar_telemetria()` será llamado sin preguntar de qué clase es cada objeto:
-```python
-# Estructura prevista para la implementación (ejemplo de diseño)
-red_iot = [sensor_temp, actuador_ventilador, sensor_luz]
-
-for dispositivo in red_iot:
-    print(dispositivo.enviar_telemetria())
-```
-En este ejemplo se propone que `enviar_telemetria()` devuelva una cadena de texto, tal como indica el UML, y que `print()` muestre el resultado en consola. Los objetos de la lista deberán crearse previamente en `main.py`.
-De esta manera, cada instancia ejecutará la versión del método definida por su clase. No se usarán condicionales `if/else` para identificar si el elemento es sensor o actuador. Esto no impide utilizar validaciones condicionales dentro de los métodos cuando sean necesarias para verificar datos o estados.
-4. Organización propuesta del repositorio
-De acuerdo con la guía, los archivos de control permanecerán en la raíz, mientras que el código y las evidencias de la Práctica 2 se organizarán en sus propias carpetas:
-```text
-repositorio/
-├── .gitignore
-├── AUTHORS.md
-└── practica-02/
-    ├── src/
-    │   ├── nodo_iot.py      # Superclase
-    │   ├── nodos.py         # NodoSensor y NodoActuador
-    │   └── main.py          # Simulación y bucle polimórfico
-    └── docs/
-        ├── Avance_Semana_01_Practica_02.md
-        ├── Reporte_Evidencias_P2.pdf   # Entregable final
-        └── evidencias/                  # Capturas y UML exportado
-```
-Los nombres de los tres archivos Python son sugeridos; lo obligatorio es mantener claramente separados el código de la clase padre, las subclases y el script principal, conforme a la estructura `practica-02/src/`. Las carpetas y archivos pendientes se crearán conforme avance la implementación.
-5. Matriz de avances y evidencias
-Requisito	Situación documentada en Semana 1	Evidencia para el reporte final
-Arquitectura con `NodoIoT`	Diseño inicial descrito	Código de clase padre
-Herencia de `NodoSensor` y `NodoActuador`	Relaciones UML propuestas	Código con `super()`
-Encapsulamiento y setters	Validaciones definidas a nivel de diseño	Pruebas de valores válidos e inválidos
-Sobrescritura de `enviar_telemetria()`	Comportamiento previsto	Ejecución de cada subclase
-Bucle polimórfico	Estructura propuesta con salida en consola	Captura de consola ejecutando la lista mixta
-Diagrama UML	Borrador Mermaid incluido	Imagen UML incorporada al PDF
-Consola HMI	Sin captura disponible	Captura real de ejecución
-Video público (máx. 3 minutos)	Sin enlace disponible	URL funcional de demostración
-Repositorio GitHub	Estructura propuesta	Enlace e historial de commits
-Reporte final PDF	Aún no generado	`practica-02/docs/Reporte_Evidencias_P2.pdf`
-6. Actividades siguientes
-Para continuar el desarrollo a partir de este diseño, se contemplan las siguientes tareas:
-Implementar la clase padre `NodoIoT` y verificar la inicialización de sus atributos.
-Crear `NodoSensor` y `NodoActuador` empleando `super()`.
-Probar los atributos privados y los setters con entradas válidas e inválidas.
-Sobrescribir `enviar_telemetria()` en ambas subclases.
-Ejecutar la lista mixta `red_iot` y confirmar el comportamiento polimórfico y la salida en consola.
-Preparar el HMI de consola y obtener capturas auténticas de su ejecución.
-Exportar el UML como imagen, grabar el video demostrativo y verificar que el enlace sea público.
-Integrar las evidencias al PDF final y comprobar la estructura del repositorio.
-7. Conclusión preliminar
-El avance de la Semana 1 presenta una base de diseño para transformar el manejo de sensores y actuadores de la Práctica 1 en un sistema con herencia, encapsulamiento y polimorfismo. La superclase `NodoIoT` permitirá centralizar información común, mientras que las subclases especializarán el comportamiento de cada dispositivo. El bucle polimórfico propuesto simplificará la generación de telemetría al evitar comparaciones por tipo de objeto.
-La siguiente etapa consistirá en convertir este diseño en archivos Python verificables y reunir evidencias reales de ejecución. La documentación final se entregará en PDF dentro de `practica-02/docs/`, acompañada de capturas y un enlace público al video demostrativo.
+Los signos `+` y `-` representan, respectivamente, miembros públicos y privados. El diagrama muestra una propuesta de diseño y debe contrastarse con el código definitivo antes de incorporarlo al reporte final.
+3.3 Resultado de la semana 1
+Se dejó definida la responsabilidad de las tres clases, la relación de herencia y el comportamiento esperado del envío de telemetría. También se estableció la separación del código fuente y los documentos dentro del repositorio. Este resultado es de diseño, no una afirmación de pruebas funcionales ejecutadas.
 ---
-Fecha de entrega indicada para este avance: 07/11/2026.
+4. Semana 2 — Implementación de clases y comportamiento polimórfico
+Enfoque: transformar el diseño en archivos Python reutilizables.
+4.1 Desarrollo reportado
+De acuerdo con la bitácora proporcionada por el equipo, se avanzó en los siguientes módulos:
+Archivo	Desarrollo reportado
+`src/nodo_iot.py`	Superclase con identificación, IP, ubicación, estado de conexión y métodos comunes
+`src/nodo_sensor.py`	Subclase con `super()`, límite de alerta privado, validación de valores y telemetría de sensores
+`src/nodo_actuador.py`	Subclase con estado y potencia protegidos, métodos de encendido/apagado y telemetría de actuadores
+`src/main.py`	Creación de nodos y recorrido de una colección mixta llamada `red_iot`
+La organización anterior se presenta como implementación informada en el texto del equipo; para darla por comprobada se requiere revisar los archivos y ejecutar el programa.
+4.2 Aplicación de los conceptos de POO
+Abstracción. Los dispositivos tienen una identidad, una dirección lógica y una ubicación, por lo que estos datos se reúnen en `NodoIoT` sin importar si el objeto es sensor o actuador.
+Herencia. `NodoSensor` y `NodoActuador` reciben los atributos comunes desde la clase padre. Así se evita repetir información en cada dispositivo.
+Encapsulamiento. Los atributos `__limite_alerta`, `__estado_activo` y `__potencia_pwm` se manejan mediante métodos públicos controlados. Los límites y rangos aceptados deben verificarse en las pruebas.
+Polimorfismo. Los distintos nodos responden al mismo método `enviar_telemetria()`, pero cada subclase prepara un mensaje diferente.
+4.3 Ejemplo del ciclo polimórfico
+El siguiente fragmento ilustra la estructura esperada; no se presenta como una transcripción comprobada del código existente:
+```python
+# Ejemplo ilustrativo; supone que los nodos ya fueron creados.
+red_iot = [sensor_suelo, sensor_ambiente, actuador_riego]
+
+for nodo in red_iot:
+    print(nodo.enviar_telemetria())
+```
+El programa recorre la lista sin utilizar `if/else` para identificar la clase de cada nodo. Cada objeto ejecuta su propia versión de `enviar_telemetria()`. Para que el ejemplo imprima los datos, se asume que el método devuelve una cadena de texto.
+4.4 Validaciones previstas
+En sensores, rechazar límites de alerta no numéricos, no finitos o fuera del rango definido para la magnitud simulada.
+En actuadores, permitir cambios de estado a través de métodos públicos.
+Si se adopta PWM de 8 bits, aceptar únicamente enteros de `0` a `255` para `__potencia_pwm`.
+Comprobar que cada mensaje de telemetría identifique de forma clara el nodo y su lectura o estado.
+4.5 Resultado de la semana 2
+La bitácora del equipo reporta una estructura modular con clases especializadas, atributos protegidos y recorrido polimórfico. Queda pendiente adjuntar la ejecución real y registrar los resultados de los casos de prueba para confirmar el funcionamiento.
+---
+5. Semana 3 — Integración del sistema y propuesta de monitoreo
+Enfoque: reunir las mediciones y estados de la red en una vista general y definir el comportamiento de control del invernadero.
+5.1 Vista del sistema
+La imagen proporcionada muestra un monitor de red IoT para un invernadero, dividido en secciones de nodos conectados, datos de sensores, estado de actuadores, lógica de control y telemetría recibida.
+![Referencia visual del monitor IoT para microclimas agrícolas](evidencias/referencia_monitor_iot.png)
+Figura 1. Imagen de referencia del panel de supervisión proporcionada para la bitácora. Los valores mostrados son ilustrativos y no equivalen, por sí solos, a mediciones ni pruebas verificadas del programa.
+5.2 Dispositivos representados
+ID	Tipo	Ubicación o función	Dirección lógica mostrada
+`S001`	Sensor	Humedad del suelo	`192.168.1.51`
+`S002`	Sensor	Temperatura, humedad relativa y luminosidad	`192.168.1.52`
+`A001`	Actuador	Electroválvula de riego	`192.168.1.61`
+`A002`	Actuador	Ventilador extractor	`192.168.1.62`
+`A003`	Actuador	Iluminación	`192.168.1.63`
+Las direcciones IP funcionan como identificadores simulados en el contexto de esta práctica; no se afirma que existan dispositivos físicos conectados a esas direcciones.
+5.3 Variables y estados observados en la imagen
+Elemento	Valor visible en la referencia	Interpretación
+Humedad del suelo	`68 %`	Lectura simulada para decidir el riego
+Temperatura ambiente	`24.5 °C`	Variable para supervisar la ventilación
+Humedad relativa del aire	`72 %`	Condición ambiental adicional
+Intensidad lumínica	`320 lux`	Información para evaluar el alumbrado
+Electroválvula de riego	`ON`	Riego activado en la referencia
+Ventilador extractor	`ON`, PWM `75 %`	Ventilación con potencia regulada
+Iluminación	`OFF`	Alumbrado apagado en la referencia
+Los números y estados anteriores se extrajeron de la imagen. No se deben tratar como resultados experimentales mientras no estén respaldados por registros reales de la simulación.
+5.4 Lógica de control con histéresis
+La histéresis utiliza dos umbrales distintos para evitar que un actuador se encienda y apague constantemente cuando una medición oscila alrededor de un único límite.
+Ejemplo de riego para humedad del suelo:
+Si la humedad es menor o igual a 60 %, activar el riego.
+Si la humedad es mayor o igual a 75 %, desactivar el riego.
+Si la humedad permanece entre 60 % y 75 %, conservar el estado anterior de la válvula.
+Así, un valor de 68 % con la válvula encendida es coherente si el riego se activó antes al bajar la humedad al umbral inferior. Sin conocer el estado previo, no es posible deducir la decisión únicamente a partir del 68 %.
+Para ventilación: la variable de referencia es la temperatura en grados Celsius, por lo que sus umbrales deben expresarse en °C, no en porcentajes de humedad. Se propone encender al superar una temperatura alta `T_alta`, apagar al bajar de `T_baja` y conservar el estado entre ambas, con `T_alta > T_baja`. Los valores de temperatura concretos deben definirse al configurar la simulación.
+El porcentaje PWM 75 % corresponde a la regulación del ventilador y es diferente de los umbrales de temperatura. Si se utiliza PWM de 8 bits, el 75 % equivale aproximadamente a un valor de 191 sobre 255; esta equivalencia es un cálculo de referencia, no un parámetro confirmado del código.
+5.5 Telemetría y presentación de datos
+La sección inferior del panel agrupa mensajes que identifican el dispositivo, la lectura o acción y la hora del evento. En una implementación comprobable, cada registro deberá mostrar como mínimo:
+Identificador único del nodo.
+Lectura o estado reportado y sus unidades, cuando correspondan.
+Fecha u hora generada por la simulación.
+Estado de conexión, si el sistema utiliza esa propiedad.
+La consola HMI puede ser la interfaz funcional requerida para la práctica. La imagen sirve como referencia para una posible presentación gráfica, pero no es necesario afirmar que se ha programado un panel gráfico si solamente existe su diseño.
+5.6 Observaciones para corregir el panel antes de la entrega
+En la imagen de referencia hay aspectos que conviene revisar para que la demostración sea coherente:
+El bloque de ventilación utiliza el término temperatura, pero muestra límites de `60 %` y `75 %`. Si el control se basa en temperatura, estos umbrales deben convertirse en valores configurados en °C.
+El panel muestra la iluminación apagada (`A003`, `OFF`), mientras que una línea del registro inferior parece indicar iluminación encendida. Si ambos datos corresponden al mismo instante, se debe corregir la discrepancia; si corresponden a instantes distintos, las horas deben permitir distinguirlos.
+El estado de riego al `68 %` de humedad debe validarse considerando la memoria del estado anterior, ya que se encuentra entre los dos límites de histéresis.
+Estos puntos se anotan como revisión de consistencia del diseño visual, no como errores comprobados en el código Python.
+5.7 Resultado de la semana 3
+Quedó documentada la composición de la red de microclimas agrícolas, sus variables principales y una propuesta de visualización. También se explicaron las reglas de control por histéresis que deberá seguir el sistema. La integración funcional, la consistencia de los estados y la generación efectiva de mensajes requieren pruebas y capturas de ejecución.
+---
+6. Estructura de archivos de la práctica
+```text
+practica-02/
+├── src/
+│   ├── nodo_iot.py
+│   ├── nodo_sensor.py
+│   ├── nodo_actuador.py
+│   └── main.py
+└── docs/
+    ├── Bitacora_Avances_Practica_02_Semanas_01_02_03.md
+    ├── Reporte_Evidencias_P2.pdf       # Entregable final pendiente
+    └── evidencias/
+        ├── referencia_monitor_iot.png  # Imagen proporcionada
+        └── ...                          # Capturas reales por agregar
+```
+Los archivos `.py` se enumeran conforme al avance descrito por el equipo. Su existencia y contenido deben comprobarse en el repositorio antes de cerrar la entrega.
+7. Seguimiento de avances y evidencias
+Elemento	Semana	Situación según la información proporcionada	Evidencia por completar
+Arquitectura con `NodoIoT`	1	Diseño documentado	Comparación con código fuente
+Diagrama UML	1	Propuesta incluida	Exportación legible al PDF
+Herencia y uso de `super()`	2	Implementación reportada	Código revisado
+Encapsulamiento y validaciones	2	Implementación reportada	Pruebas de entradas válidas e inválidas
+Sobrescritura de telemetría	2	Implementación reportada	Salida real del programa
+Bucle polimórfico	2	Implementación reportada	Captura de consola
+Monitor del invernadero	3	Referencia visual proporcionada	Aclarar si es diseño o interfaz ejecutable
+Control con histéresis	3	Reglas documentadas	Pruebas de cruce de umbrales y memoria de estado
+Video demostrativo	Entrega	No proporcionado	Enlace público, máximo 3 minutos
+Reporte PDF	Entrega	No proporcionado	`docs/Reporte_Evidencias_P2.pdf`
+7.1 Casos de prueba recomendados
+Prueba	Acción	Resultado esperado
+Herencia	Crear un sensor y un actuador	Ambos comparten atributos base de `NodoIoT`
+Validación del sensor	Intentar asignar un límite fuera de rango	Se rechaza el valor de manera controlada
+Control de PWM	Probar `0`, `255` y un valor inválido	Se aceptan los extremos válidos y se rechaza el inválido
+Polimorfismo	Recorrer `red_iot` y llamar `enviar_telemetria()`	Cada objeto devuelve información específica sin detectar su tipo
+Riego por histéresis	Simular 59 %, luego 68 % y finalmente 76 %	La válvula enciende, conserva el encendido y después apaga
+Ventilación por histéresis	Cruzar umbrales configurados en °C	El ventilador cambia de estado sólo en los límites definidos
+Registro de eventos	Generar distintas lecturas y estados	Los mensajes muestran ID, valor/estado y hora consistente
+Estado de las pruebas: pendientes de documentar con evidencia verificable. La tabla contiene resultados esperados, no resultados que ya se hayan observado.
+8. Actividades pendientes para la entrega
+[ ] Revisar el código completo para confirmar la correspondencia con el UML.
+[ ] Ejecutar el programa y documentar los resultados del ciclo polimórfico.
+[ ] Comprobar las validaciones de límites, estados y PWM.
+[ ] Definir y probar umbrales de ventilación expresados en °C.
+[ ] Verificar la coherencia entre datos de sensores, estados de actuadores y telemetría.
+[ ] Capturar la consola HMI en funcionamiento.
+[ ] Aclarar si el panel visual es una maqueta, un diseño o una interfaz funcional.
+[ ] Exportar el UML a imagen e incluirlo en el reporte final.
+[ ] Grabar el video demostrativo de máximo 3 minutos y comprobar que su enlace sea público.
+[ ] Generar y revisar `practica-02/docs/Reporte_Evidencias_P2.pdf`.
+9. Conclusión general
+Durante las primeras tres semanas se ha descrito el paso de un conjunto de dispositivos simulados a una arquitectura IoT más organizada. La Semana 1 se centró en analizar el problema y diseñar una jerarquía de clases; la Semana 2 reunió el desarrollo en Python reportado por el equipo, aplicando herencia, encapsulamiento y polimorfismo; y la Semana 3 permitió definir cómo representar la red de un invernadero y cómo aplicar reglas de control con histéresis.
+El proyecto muestra una aplicación práctica de la programación orientada a objetos: los dispositivos comparten una estructura común, pero mantienen comportamientos propios. Como siguiente paso, será indispensable respaldar el avance con ejecución real, pruebas de validación y evidencias claras, para que la documentación final refleje con precisión lo que el software efectivamente realiza.
+---
+Documento: Bitácora de avances — Práctica 2, semanas 1, 2 y 3.  
+Nota: la imagen del monitor se utiliza como referencia visual y no sustituye las capturas de ejecución requeridas.
