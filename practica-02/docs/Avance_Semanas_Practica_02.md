@@ -109,7 +109,7 @@ La bitácora del equipo reporta una estructura modular con clases especializadas
 Enfoque: reunir las mediciones y estados de la red en una vista general y definir el comportamiento de control del invernadero.
 5.1 Vista del sistema
 La imagen proporcionada muestra un monitor de red IoT para un invernadero, dividido en secciones de nodos conectados, datos de sensores, estado de actuadores, lógica de control y telemetría recibida.
-![Referencia visual del monitor IoT para microclimas agrícolas](evidencias/referencia_monitor_iot.png)
+![Referencia visual del monitor IoT para microclimas agrícolas](practica-02/evidencias/referencia_monitor_iot.png)
 Figura 1. Imagen de referencia del panel de supervisión proporcionada para la bitácora. Los valores mostrados son ilustrativos y no equivalen, por sí solos, a mediciones ni pruebas verificadas del programa.
 5.2 Dispositivos representados
 ID	Tipo	Ubicación o función	Dirección lógica mostrada
