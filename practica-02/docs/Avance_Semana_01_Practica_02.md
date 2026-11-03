@@ -8,7 +8,7 @@ fecha_inicio: "2026-10-14"
 fecha_actualizacion: "2026-11-03"
 fecha_entrega: "2026-11-07"
 estado: "En desarrollo; validación de evidencias pendiente"
-tags:
+tags
 python
 programacion-orientada-a-objetos
 herencia
