@@ -1,3 +1,22 @@
+---
+practica: 2
+titulo: "Sistema de Control Distribuido de Microclimas Agrícolas"
+subtitulo: "Arquitectura modular de nodos IoT mediante herencia y polimorfismo"
+asignatura: "Programación Orientada a Objetos"
+tipo_documento: "Bitácora de avances — Semanas 1, 2 y 3"
+fecha_inicio: "2026-10-14"
+fecha_actualizacion: "2026-11-03"
+fecha_entrega: "2026-11-07"
+estado: "En desarrollo; validación de evidencias pendiente"
+tags:
+python
+programacion-orientada-a-objetos
+herencia
+encapsulamiento
+polimorfismo
+iot
+histeresis
+---
 Práctica 2 — Bitácora de avances: semanas 1, 2 y 3
 Sistema de Control Distribuido de Microclimas Agrícolas
 Asignatura: Programación Orientada a Objetos  
