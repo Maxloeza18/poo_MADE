@@ -1,0 +1,12 @@
+Prueba local del 04/11/2026
+
+[SENS-TEMP] Conectado a la red web en IP: 192.168.1.10
+[ACT-VENT] Conectado a la red web en IP: 192.168.1.11
+¡ALERTA SENS-TEMP! Temperatura excedió el límite: 36.5
+¡ALERTA SENS-LUZ! Luminosidad excedió el límite: 45.0
+[ACT-VENT] Ventilador de extracción ENCENDIDO (PWM: 200).
+
+--- Ejecutando Bucle Polimórfico ---
+[SENS-TEMP | Online] Temperatura: 36.5
+[ACT-VENT | Online] Ventilador de extracción: ON a 200 PWM
+[SENS-LUZ | Offline] Luminosidad: 45.0
