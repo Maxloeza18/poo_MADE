@@ -45,7 +45,7 @@ public:
 };
 
 
-// 2. Subclase para actuadores (Ej. Relé para bomba de agua o ventilador)
+// 2. Subclase para actuadores (Ejemplo. Relé para bomba de agua o ventilador)
 class NodoActuadorFisico : public NodoIoT {
 private:
     bool _estadoActivo;
