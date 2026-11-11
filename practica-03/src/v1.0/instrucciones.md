@@ -44,3 +44,12 @@ El Constructor: Se encarga de inicializar el identificador en formato string y e
 Métodos Virtuales (virtual): Al usar la palabra reservada virtual en iniciar(), permitimos que cada sensor o actuador futuro sobrescriba esta función con su propia lógica (por ejemplo, definir si el pin es INPUT o OUTPUT).
 
 Método Virtual Puro (= 0): La línea virtual void ejecutarAccion() = 0; convierte a NodoIoT en una clase abstracta. Esto significa que no podemos instanciar un "NodoIoT" genérico en el código principal; sirve estrictamente como un molde. Cualquier clase hija que herede de ella estará obligada por el compilador de PlatformIO a crear su propia versión de ejecutarAccion() (ya sea para leer un ADC o activar un PWM).
+
+
+
+Nodos fisicos:
+Herencia (: public NodoIoT): Al indicar que ambas clases heredan de NodoIoT, automáticamente obtienen los atributos protegidos de ayer (idDispositivo, pin, conectado) sin necesidad de volver a escribirlos.
+
+Encapsulamiento y Protección: En NodoSensorFisico, el atributo _umbralAlerta es estrictamente private. La única forma de modificarlo desde el código principal es a través de setUmbralAlerta(), el cual actúa como un filtro de seguridad. Como el ESP32 tiene un ADC de 12 bits, el método rechaza cualquier valor fuera del rango de 0 a 4095, evitando comportamientos erráticos en el sistema del invernadero.
+
+Polimorfismo (override): La superclase exigía que existiera una función ejecutarAccion(), pero no decía qué hacía. Aquí, el polimorfismo permite que esa misma orden signifique cosas distintas: para el sensor, significa ejecutar un analogRead(pin); para el actuador, significa aplicar un digitalWrite(pin, estado)
