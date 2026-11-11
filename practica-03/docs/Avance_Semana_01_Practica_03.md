@@ -1,64 +1,121 @@
-# Práctica 3 — Avance de desarrollo, Semana 1
-
+# Avance de la Semana 1 — Práctica 3
 ## Implementación Física de Nodos IoT Heterogéneos en C++ (ESP32)
 
 **Asignatura:** Programación Orientada a Objetos  
-**Fecha de actualización:** 09 de noviembre de 2026  
-**Etapa:** Semana 1 — análisis, diseño y preparación de la implementación  
-**Lenguaje y plataforma:** C++ para ESP32 (Arduino IDE o PlatformIO)  
-**Estado:** Diseño preliminar documentado; código compilado y montaje físico pendientes de verificar
+**Documento:** Reporte de avance semanal  
+**Corte de actualización:** 11 de noviembre de 2026  
+**Estado:** Segundo avance incorporado; pruebas físicas pendientes
 
 ---
 
 ## 1. Introducción
 
-En la Práctica 2 se diseñó y simuló en Python una arquitectura de nodos IoT mediante una clase base y subclases especializadas para sensores y actuadores. La Práctica 3 retoma ese enfoque y lo traslada a un **ESP32 programado en C++**, de modo que las lecturas y las acciones correspondan a componentes electrónicos reales.
+La Práctica 3 tiene como propósito trasladar al entorno físico del microcontrolador ESP32 los principios de programación orientada a objetos trabajados previamente mediante simulaciones. En esta ocasión, la arquitectura se desarrolla en C++ y se orienta a representar dispositivos con distintas funciones, principalmente sensores y actuadores.
 
-El reto consiste en conservar los principios de **herencia, encapsulamiento y polimorfismo**, adaptándolos al funcionamiento del microcontrolador. Para ello, se propone una clase padre `NodoIoT`, dos clases derivadas (`NodoSensorFisico` y `NodoActuadorFisico`) y un arreglo de punteros a la clase base que permita ejecutar las acciones de cada dispositivo desde el ciclo principal de Arduino.
+Durante la primera semana se ha trabajado en dos etapas. La primera consistió en definir la organización del programa y las responsabilidades de las clases; la segunda permitió trasladar ese diseño a archivos de cabecera que ya contienen las primeras implementaciones. El objetivo es mantener una estructura que pueda ampliarse sin repetir el código común a cada dispositivo.
 
-**Alcance de este avance:** se documentan la estructura propuesta del programa, la selección preliminar del circuito, los criterios de validación y el plan de pruebas. **No se presentan todavía como realizados** la compilación del programa, el montaje del ESP32, las mediciones del sensor ni la grabación de una demostración.
+Este documento registra **lo planeado y lo implementado hasta el segundo avance**, distinguiendo el trabajo de programación de las pruebas con hardware, que todavía no se han acreditado.
 
-## 2. Objetivo de la Semana 1
+## 2. Objetivo de la semana
 
-Definir la arquitectura de software y el esquema inicial de conexión para construir una red IoT heterogénea en un ESP32, aplicando los mismos principios de programación orientada a objetos utilizados en Python, pero mediante clases, métodos virtuales y dispositivos físicos en C++.
+Diseñar e implementar la estructura inicial de clases para un sistema de nodos IoT físicos basado en ESP32, utilizando **abstracción, herencia, encapsulamiento y polimorfismo**, de manera que sensores y actuadores compartan una interfaz común, pero ejecuten operaciones diferentes según el tipo de dispositivo.
 
-**Resultados documentados en esta etapa:**
+### Objetivos específicos
 
-- Identificación de las responsabilidades de la superclase y de sus subclases.
-- Propuesta de atributos encapsulados y validación del umbral del sensor.
-- Selección preliminar de una entrada analógica y una salida digital.
-- Diseño del arreglo polimórfico que se recorrerá desde `setup()` y `loop()`.
-- Definición de evidencias y pruebas necesarias para la entrega final.
+- Definir la superclase `NodoIoT`, encargada de concentrar los atributos y comportamientos comunes.
+- Establecer clases derivadas para sensores y actuadores.
+- Proteger los parámetros internos que requieran validación.
+- Preparar métodos para configurar los pines y ejecutar acciones sobre el hardware.
+- Documentar los avances y dejar identificadas las pruebas que deben realizarse posteriormente.
 
-## 3. Análisis y diseño de clases
+## 3. Desarrollo de la Semana 1
 
-### 3.1 Superclase `NodoIoT`
+### 3.1 Primer avance — Análisis y diseño de la arquitectura
 
-La clase `NodoIoT` reunirá los elementos compartidos por todos los dispositivos: `idDispositivo`, `pin` y `conectado`. Su constructor recibirá el identificador y el pin físico; los métodos virtuales `iniciar()` y `ejecutarAccion()` permitirán que cada subclase defina su comportamiento.
+En la primera etapa se definió una arquitectura jerárquica en la que los dispositivos comparten datos básicos, como un identificador, un pin de conexión y un indicador de inicialización. La idea principal fue evitar que cada sensor o actuador tuviera que declarar nuevamente estos elementos.
 
-| Elemento | Función prevista |
+Se plantearon tres responsabilidades:
+
+| Clase | Función dentro del sistema | Comportamiento previsto |
+|---|---|---|
+| `NodoIoT` | Servir como base de todos los dispositivos. | Conservar los atributos compartidos y establecer métodos virtuales. |
+| `NodoSensorFisico` | Representar un dispositivo de entrada. | Configurar un pin como entrada, adquirir una lectura y verificar un umbral. |
+| `NodoActuadorFisico` | Representar un dispositivo de salida. | Configurar un pin como salida y modificar su estado lógico. |
+
+Desde el diseño se consideró que la clase padre debía permitir el uso de **polimorfismo**. Esto significa que un programa principal podrá trabajar con distintos nodos a través de una misma interfaz, aunque cada clase resuelva internamente su operación de una manera particular.
+
+También se contempló una separación entre el código compartido y el específico del hardware, mediante archivos de cabecera de C++. En esta fase, la selección definitiva de pines y el montaje físico quedaron como actividades posteriores.
+
+### 3.2 Segundo avance — Implementación de la superclase `NodoIoT`
+
+El segundo avance aporta el archivo `NodoIoT.h`, que contiene la primera implementación de la clase padre. En lugar de permanecer como una propuesta de diseño, sus atributos y métodos ya están declarados en C++ y utilizan el entorno Arduino mediante `#include <Arduino.h>`.
+
+**Elementos implementados:**
+
+- `idDispositivo` (`String`): nombre o identificador del nodo.
+- `pin` (`int`): referencia al pin físico utilizado por el dispositivo.
+- `conectado` (`bool`): indicador de estado inicializado en `false`.
+- Constructor `NodoIoT(String id, int pinHardware)`: recibe y asigna los datos iniciales.
+- Destructor virtual `~NodoIoT()`: permite la destrucción adecuada de objetos derivados mediante punteros a la clase base.
+- Método virtual `iniciar()`: deja abierta la configuración que realizará cada subclase.
+- Método virtual puro `ejecutarAccion() = 0`: obliga a las clases concretas a definir su comportamiento.
+
+La declaración de `ejecutarAccion()` como método virtual puro convierte a `NodoIoT` en una **clase abstracta**. Por ello, el código está pensado para crear objetos de las clases derivadas y no objetos genéricos de `NodoIoT`.
+
+Los atributos se declararon como `protected`, por lo que pueden utilizarse desde las clases hijas sin exponerlos como miembros públicos.
+
+> **Aclaración:** aunque el atributo se llama `conectado`, en el código recibido se emplea como indicador de inicialización. No existe todavía una implementación de conexión Wi-Fi o comunicación de red.
+
+### 3.3 Segundo avance — Implementación de `NodosFisicos.h`
+
+El archivo `NodosFisicos.h` incorpora dos clases derivadas, ambas con herencia pública de `NodoIoT`. Con esto se pasa de una estructura abstracta a comportamientos específicos que hacen uso de las funciones del ESP32.
+
+#### 3.3.1 Clase `NodoSensorFisico`
+
+Esta clase representa un nodo que obtiene información mediante una entrada analógica. Su constructor invoca el constructor de `NodoIoT` y establece un umbral de alerta inicial de **2048**.
+
+En el método `iniciar()` se configura el pin mediante `pinMode(pin, INPUT)` y se actualiza el indicador `conectado` a `true`.
+
+El atributo `_umbralAlerta` es privado. Para modificarlo se agregó `setUmbralAlerta(int umbral)`, que acepta valores entre **0 y 4095**. Si se proporciona un valor fuera del intervalo, se imprime un mensaje de error por el monitor serie y el umbral permanece sin cambios.
+
+Por su parte, `ejecutarAccion()` realiza las siguientes operaciones:
+
+1. Lee la entrada mediante `analogRead(pin)`.
+2. Muestra el identificador del dispositivo y la lectura ADC en el monitor serie.
+3. Compara la lectura con el umbral almacenado.
+4. Si la lectura **supera** el umbral, agrega el mensaje de alerta correspondiente.
+
+Esto permite observar tanto la lectura como una condición básica de advertencia. El código todavía no convierte los valores ADC a unidades físicas, como grados Celsius o porcentaje de humedad; dicha conversión dependerá del sensor que se conecte.
+
+#### 3.3.2 Clase `NodoActuadorFisico`
+
+La clase `NodoActuadorFisico` representa un dispositivo de salida, como un relé o una etapa de control de encendido y apagado.
+
+Se agregó el atributo privado `_estadoActivo`, que se inicializa en `false`. Su método `iniciar()` configura el pin como `OUTPUT`, escribe `LOW` para comenzar apagado y marca el nodo como inicializado.
+
+Se implementaron dos acciones principales:
+
+- `alternarEstado()`: invierte el valor lógico de `_estadoActivo`.
+- `ejecutarAccion()`: escribe `HIGH` o `LOW` en el pin mediante `digitalWrite()` y muestra el resultado por el monitor serie.
+
+Es importante observar que `alternarEstado()` **solo cambia el estado interno**. La salida física se actualiza después, cuando se ejecuta `ejecutarAccion()`.
+
+Esta implementación ofrece un control digital básico; aún no incorpora modulación PWM ni una lógica automática de respuesta a las lecturas de los sensores.
+
+### 3.4 Aplicación de los conceptos de POO
+
+| Concepto | Aplicación dentro del código |
 |---|---|
-| `idDispositivo` | Identificar el nodo en los mensajes del monitor serie. |
-| `pin` | Almacenar el GPIO que utilizará el dispositivo. |
-| `conectado` | Representar el estado lógico de inicialización o disponibilidad del nodo. |
-| `iniciar()` | Configurar el hardware mediante `pinMode()` y otras instrucciones necesarias. |
-| `ejecutarAccion()` | Ejecutar la lectura o actuación específica de cada nodo. |
+| **Abstracción** | `NodoIoT` establece las características comunes y declara una operación que cada dispositivo debe implementar. |
+| **Herencia** | `NodoSensorFisico` y `NodoActuadorFisico` derivan de `NodoIoT` mediante `public NodoIoT`. |
+| **Encapsulamiento** | `_umbralAlerta` y `_estadoActivo` son privados; el umbral se modifica mediante un método que valida su intervalo. |
+| **Polimorfismo** | Ambas clases sobrescriben `iniciar()` y `ejecutarAccion()` con operaciones propias de entrada o salida. |
 
-En C++, la reutilización del constructor padre se hará con una **lista de inicialización** (por ejemplo, `NodoIoT(id, pinHardware)`); a diferencia de Python, no se utiliza `super()`.
+El polimorfismo ya está definido en las clases, pero **su utilización desde un programa principal con una colección heterogénea de objetos aún no se ha mostrado** en los archivos entregados.
 
-### 3.2 Subclase `NodoSensorFisico`
+### 3.5 Diagrama UML actualizado conforme al código
 
-Esta clase representará un sensor conectado al ESP32. En la propuesta inicial se utilizará un elemento analógico, como un **potenciómetro o un LDR con divisor de tensión**, para facilitar la comprobación de cambios de lectura.
-
-El atributo privado `_umbralAlerta` se modificará mediante un método público de validación. Para una resolución ADC configurada a 12 bits, el umbral se establecerá dentro de **0 a 4095**. En `ejecutarAccion()`, el sensor realizará la lectura mediante `analogRead(pin)` y la reportará por el monitor serie, incluyendo una advertencia cuando se supere el umbral.
-
-### 3.3 Subclase `NodoActuadorFisico`
-
-La clase `NodoActuadorFisico` representará una salida del ESP32. Para las primeras pruebas se propone un **LED con resistencia limitadora**, ya que permite visualizar claramente la activación y desactivación sin requerir un controlador de potencia externo.
-
-Su atributo privado `_estadoActivo` controlará el estado lógico. En `iniciar()` se configurará el GPIO como salida; en `ejecutarAccion()` se aplicará el estado con `digitalWrite()`. El control PWM podría incorporarse después, si se elige un actuador que lo requiera y se confirma la API correspondiente a la versión de Arduino-ESP32 utilizada.
-
-### 3.4 Propuesta de diagrama UML
+El siguiente diagrama refleja los miembros principales presentes en los dos archivos de cabecera, no únicamente la propuesta inicial.
 
 ```mermaid
 classDiagram
@@ -67,22 +124,24 @@ classDiagram
         #int pin
         #bool conectado
         +NodoIoT(String id, int pinHardware)
+        +~NodoIoT()
         +iniciar() void
-        +ejecutarAccion() void
+        +ejecutarAccion()* void
     }
 
     class NodoSensorFisico {
         -int _umbralAlerta
-        -int _lecturaActual
-        +establecerUmbral(int valor) bool
+        +NodoSensorFisico(String id, int pinHardware)
         +iniciar() void
+        +setUmbralAlerta(int umbral) void
         +ejecutarAccion() void
     }
 
     class NodoActuadorFisico {
         -bool _estadoActivo
-        +establecerEstado(bool activo) void
+        +NodoActuadorFisico(String id, int pinHardware)
         +iniciar() void
+        +alternarEstado() void
         +ejecutarAccion() void
     }
 
@@ -90,107 +149,57 @@ classDiagram
     NodoIoT <|-- NodoActuadorFisico
 ```
 
-El diagrama es **preliminar** y deberá ajustarse a los nombres y firmas que finalmente se utilicen en el código.
+**Notación:** `+` público; `#` protegido; `-` privado; `*` método virtual puro.
 
-## 4. Propuesta de conexión física
+### 3.6 Organización del código desarrollada
 
-Para realizar una prueba mínima de entrada y salida se plantea el siguiente montaje:
-
-| Componente | Conexión propuesta | Propósito |
-|---|---|---|
-| ESP32 | Alimentación mediante USB | Ejecutar el programa C++ y comunicar datos por serie. |
-| Potenciómetro o LDR con divisor de tensión | GPIO 34 (ADC, en ESP32 clásico) | Obtener una lectura analógica variable. |
-| LED con resistencia de 220 a 330 Ω | GPIO 23 y GND | Representar la actuación digital. |
-| Protoboard y cables | Según el esquema definitivo | Montar y modificar fácilmente el circuito. |
-
-**Precauciones de diseño:** verificar que la placa utilizada tenga disponibles esos GPIO; el pin GPIO 34 es solo de entrada en el ESP32 clásico. La señal analógica debe permanecer dentro del rango eléctrico admitido por el ESP32 (habitualmente hasta 3.3 V, según la placa y su configuración). No se conectarán motores, relés sin interfaz de manejo ni otras cargas de potencia directamente a un GPIO.
-
-En el reporte final se incorporará un **esquema de conexiones** y fotografías propias del circuito montado.
-
-## 5. Diseño del polimorfismo en `setup()` y `loop()`
-
-La solución central consiste en declarar los dispositivos como objetos concretos, almacenar sus direcciones en un arreglo de punteros `NodoIoT*` e invocar los métodos virtuales a través de ese arreglo.
-
-**Ejemplo conceptual para la siguiente etapa (no verificado aún en hardware):**
-
-```cpp
-// Fragmento ilustrativo: se asume que las clases ya están definidas.
-NodoSensorFisico sensor("SENS_ANALOG", 34);
-NodoActuadorFisico actuador("ACT_LED", 23);
-NodoIoT* red[] = { &sensor, &actuador };
-const size_t totalNodos = sizeof(red) / sizeof(red[0]);
-
-void setup() {
-    Serial.begin(115200);
-    for (size_t i = 0; i < totalNodos; ++i) {
-        red[i]->iniciar();
-    }
-}
-
-void loop() {
-    for (size_t i = 0; i < totalNodos; ++i) {
-        red[i]->ejecutarAccion();
-    }
-    delay(500);
-}
-```
-
-La instrucción `red[i]->ejecutarAccion()` enviará la llamada a la implementación correspondiente al tipo real del objeto. **No se requieren comparaciones de tipo con `if/else` para elegir entre sensor y actuador**. Las condiciones internas necesarias para comparar una lectura con el umbral siguen siendo válidas.
-
-El ejemplo utiliza objetos de duración estática y sus direcciones; no necesita `new` ni asignación dinámica para este montaje reducido.
-
-## 6. Organización prevista del repositorio
+Los archivos recibidos para este avance son:
 
 ```text
-repositorio/
-├── .gitignore
-├── AUTHORS.md
-└── practica-03/
-    ├── src/
-    │   ├── NodoIoT.h
-    │   ├── NodoSensorFisico.h
-    │   ├── NodoActuadorFisico.h
-    │   └── practica_03.ino
-    └── docs/
-        ├── Avance_Semana_01_Practica_03.md
-        ├── Reporte_Evidencias_P3.pdf       # Entregable final
-        └── evidencias/                     # Esquema, fotos y capturas reales
+include/
+├── NodoIoT.h          # Superclase abstracta
+└── NodosFisicos.h     # Clases de sensor y actuador
 ```
 
-Los nombres de los archivos fuente se presentan como una propuesta organizativa y pueden ajustarse al crear el proyecto. El archivo PDF final y las evidencias todavía son elementos pendientes.
+Se utilizan guardas de inclusión (`#ifndef`, `#define` y `#endif`) para evitar definiciones duplicadas. Además, `NodosFisicos.h` incluye `NodoIoT.h`, lo que permite utilizar la clase padre al declarar las dos subclases.
 
-## 7. Matriz de avances y validaciones pendientes
+La carpeta `include/` es la ubicación indicada por la documentación de desarrollo. La estructura completa del proyecto y su archivo principal deberán verificarse al integrarlo.
 
-| Requisito | Estado de la Semana 1 | Evidencia prevista |
-|---|---|---|
-| Migración conceptual de Python a C++ | Diseño documentado | Comparación de arquitectura y código C++. |
-| Herencia entre `NodoIoT` y subclases | Estructura UML propuesta | Clases y constructores implementados. |
-| Encapsulamiento de umbral y estado | Validaciones definidas a nivel de diseño | Pruebas con valores válidos e inválidos. |
-| Métodos virtuales y polimorfismo | Bucle de ejemplo documentado | Ejecución real del arreglo `NodoIoT*`. |
-| Sensor físico con `analogRead()` | Sensor y GPIO propuestos | Lecturas reales en monitor serie. |
-| Actuador físico con `digitalWrite()` | LED y GPIO propuestos | Encendido y apagado observables. |
-| Monitor serie a 115200 baudios | Configuración incluida en ejemplo | Captura auténtica de la salida serie. |
-| Montaje en protoboard | Pendiente | Fotografías propias y esquema eléctrico. |
-| Video demostrativo (máx. 3 min) | Pendiente | Enlace público comprobado. |
-| Reporte final PDF | Pendiente | `practica-03/docs/Reporte_Evidencias_P3.pdf`. |
+## 4. Resultados registrados hasta el segundo avance
 
-## 8. Actividades para la Semana 2
+Al concluir esta etapa documental se cuenta con:
 
-1. Crear las clases `NodoIoT`, `NodoSensorFisico` y `NodoActuadorFisico` en C++.
-2. Implementar la lista de inicialización del constructor y los métodos virtuales.
-3. Incorporar el *setter* del umbral de 0 a 4095 y comprobar sus validaciones.
-4. Compilar el programa para el modelo específico de ESP32 disponible.
-5. Montar el sensor y el LED en protoboard, revisando antes las conexiones y los niveles de voltaje.
-6. Abrir el monitor serie a 115200 baudios y verificar que se impriman las lecturas y estados.
-7. Confirmar que el `loop()` ejecuta cada nodo desde el arreglo de punteros a la clase base.
-8. Registrar fotografías, capturas y observaciones de pruebas reales.
+1. Una arquitectura de tres clases organizada mediante herencia.
+2. La definición funcional de una clase abstracta con destructor virtual y método virtual puro.
+3. Dos clases derivadas que sobrescriben los métodos de la clase base.
+4. Validación de un umbral ADC en el nodo sensor.
+5. Lectura analógica y control de una salida digital escritos en C++.
+6. Mensajes de diagnóstico previstos para el monitor serie.
+7. Un diagrama UML actualizado para representar el código efectivamente proporcionado.
 
-## 9. Conclusión preliminar
+Estos resultados corresponden a **funcionalidades presentes en el código fuente**. No equivalen todavía a confirmar su funcionamiento sobre una tarjeta ESP32 real.
 
-El avance de la Semana 1 establece una ruta clara para trasladar la arquitectura de nodos IoT de Python a C++ y conectarla con hardware real. El uso de una superclase `NodoIoT`, subclases especializadas y métodos virtuales permitirá mantener una estructura modular, mientras que el arreglo de punteros facilitará el tratamiento uniforme de sensores y actuadores desde el programa principal.
+## 5. Actividades pendientes para los siguientes avances
 
-La siguiente etapa consistirá en **implementar y compilar** la propuesta, realizar el montaje físico en el ESP32 y reunir evidencias reales de su funcionamiento. Con esas pruebas se podrá completar posteriormente el reporte `Reporte_Evidencias_P3.pdf`.
+- Integrar las clases en un archivo principal que cree objetos de sensores y actuadores.
+- Comprobar una ejecución polimórfica mediante referencias o punteros a `NodoIoT`.
+- Seleccionar y documentar los GPIO adecuados para el hardware que se utilizará.
+- Compilar el proyecto con el entorno de desarrollo elegido.
+- Realizar el montaje y las pruebas físicas con el ESP32.
+- Validar lecturas y mensajes del monitor serie; registrar evidencias con resultados reales.
+- Comprobar valores límite del umbral y verificar el funcionamiento del actuador.
+
+No se registran como completadas la compilación, la carga de firmware, la comunicación por red ni las pruebas físicas, porque los archivos proporcionados no contienen esas evidencias.
+
+## 6. Conclusión de la Semana 1 (segundo avance)
+
+Durante la primera semana, el trabajo pasó de la planeación de una jerarquía de nodos IoT a la implementación de sus primeras clases en C++. Se estableció una superclase abstracta que concentra la identidad y la estructura básica de los dispositivos, y se desarrollaron dos subclases para representar las operaciones propias de sensores y actuadores.
+
+La principal aportación de este segundo avance es que los conceptos de programación orientada a objetos ya se observan directamente en el código: la herencia evita repetir atributos, el encapsulamiento controla el acceso a parámetros internos y el polimorfismo permite definir acciones distintas bajo una interfaz compartida.
+
+La siguiente etapa deberá comprobar que estas clases se integran correctamente en un programa principal y que las acciones previstas funcionan con el hardware. De esta manera se podrán complementar los avances de diseño y programación con evidencias de compilación, montaje y ejecución.
 
 ---
 
-**Nota de documentación:** este archivo es un avance de análisis y diseño, no un reporte de resultados físicos. Las marcas de cumplimiento deberán actualizarse únicamente cuando existan código compilado, mediciones, fotografías o video verificables.
+**Archivos utilizados para esta actualización:** `NodoIoT.h`, `NodosFisicos.h` e `instrucciones.md`.  
+**Tipo de actualización:** incorporación del segundo avance al reporte semanal; no se modificó el código fuente.
