@@ -53,3 +53,14 @@ Herencia (: public NodoIoT): Al indicar que ambas clases heredan de NodoIoT, aut
 Encapsulamiento y Protección: En NodoSensorFisico, el atributo _umbralAlerta es estrictamente private. La única forma de modificarlo desde el código principal es a través de setUmbralAlerta(), el cual actúa como un filtro de seguridad. Como el ESP32 tiene un ADC de 12 bits, el método rechaza cualquier valor fuera del rango de 0 a 4095, evitando comportamientos erráticos en el sistema del invernadero.
 
 Polimorfismo (override): La superclase exigía que existiera una función ejecutarAccion(), pero no decía qué hacía. Aquí, el polimorfismo permite que esa misma orden signifique cosas distintas: para el sensor, significa ejecutar un analogRead(pin); para el actuador, significa aplicar un digitalWrite(pin, estado)
+
+
+
+main.cpp
+Arreglo de Punteros (NodoIoT* red[NUM_NODOS]): A diferencia de un arreglo convencional que solo puede guardar un tipo de dato, al definir un arreglo de punteros a la superclase, el compilador nos permite guardar direcciones de memoria tanto de objetos NodoSensorFisico como de NodoActuadorFisico en la misma lista.
+
+Instanciación con new: Utilizamos el operador new para asignar memoria dinámica a cada nodo en el momento de la ejecución. Esto es altamente escalable; si en el futuro se añade el sistema de monitoreo biométrico o más nodos, basta con incrementar NUM_NODOS y añadir la nueva instancia.
+
+El Bucle for Polimórfico: La línea red[i]->ejecutarAccion(); es la culminación de la arquitectura. El procesador del ESP32 examina la tabla de métodos virtuales (vtable) de cada objeto en tiempo real para decidir si debe ejecutar el código de lectura del sensor o el código de conmutación del relé. Esto elimina por completo la necesidad de múltiples estructuras if/else o switch.
+
+Manejo de Tiempos: En este estado base, un simple delay(2000) regula la cadencia de ejecución. Al integrar el servidor web asíncrono posteriormente, este retardo se sustituirá por la función millis() (non-blocking) para evitar colgar la atención de los clientes web.
