@@ -1,0 +1,26 @@
+# Esquemático y Distribución del Sistema — Práctica 03 (Versión 1.0)
+
+> **Nota:** Este diagrama corresponde a una **versión inicial (v1.0)** de la arquitectura física del sistema, sujeta a ajustes durante las pruebas de implementación.
+
+## 1. Descripción General
+
+El circuito está basado en un microcontrolador **ESP32 DevKit (`ESP1`)** diseñado para el monitoreo y riego automatizado de plantíos. Su distribución se divide en tres bloques principales:
+
+- **Red de sensores (4 entradas):** Cuatro sensores conectados en red hacia las entradas analógicas/digitales del ESP32 (`D34`, `D35`, `D25` y `D13`) para obtener una medición más completa y precisa de las condiciones del entorno y del cultivo.
+- **Pantalla de monitoreo (`LCD1` — OLED I2C):** Pantalla conectada al ESP32 para visualizar en tiempo real el estado de los sensores, alertas y activación del sistema sin depender únicamente de la computadora.
+- **Actuador de riego (`Q1` + `RL1`):** Etapa de potencia conformada por un transistor `2N2222` (`Q1`) y un relé (`RL1`) controlado desde el pin `D15`, encargado de activar la bomba de agua para regar los plantíos cuando los sensores lo requieran.
+
+---
+
+## 2. Distribución de Conexiones en el ESP32
+
+| Bloque | Componente / Etiqueta | Pin ESP32 | Función |
+| :--- | :--- | :--- | :--- |
+| **Sensores** | Entrada Sensor 1 | `D34` (`GPIO34`) | Lectura en red de sensores |
+| **Sensores** | Entrada Sensor 2 | `D35` (`GPIO35`) | Lectura en red de sensores |
+| **Sensores** | Entrada Sensor 3 | `D25` (`GPIO25`) | Lectura en red de sensores |
+| **Sensores** | Entrada Sensor 4 | `D13` (`GPIO13`) | Lectura en red de sensores |
+| **Visualización** | Pantalla OLED (`LCD1`) | `3.3V`, `GND`, `TX0` / `RX0`* | Verificación del estado de los elementos |
+| **Actuadores** | Transistor `Q1` (`2N2222`) $\rightarrow$ Relé `RL1` | `D15` (`GPIO15`) | Activador de bomba de agua para riego |
+
+*\*Nota: En versiones posteriores los pines de comunicación de la pantalla (`SCL`/`SDA`) se reasignarán a `GPIO22` y `GPIO21` para dejar libres los pines serie.*
