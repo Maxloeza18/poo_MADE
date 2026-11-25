@@ -16,17 +16,20 @@ public:
         pin = pinHardware;
         conectado = false;
     }
-    
+
     // Destructor virtual (buena práctica en C++ al usar polimorfismo)
     virtual ~NodoIoT() {}
+
+    String getId() const { return idDispositivo; }
+    bool estaConectado() const { return conectado; }
 
     // Métodos virtuales
     virtual void iniciar() {
         // Método base que configurará el pinMode en el ESP32
     }
-    
-    // Método polimórfico puro o base
-    virtual void ejecutarAccion() = 0; 
+
+    // Método polimórfico puro
+    virtual void ejecutarAccion() = 0;
 };
 
 #endif
